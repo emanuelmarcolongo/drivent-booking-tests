@@ -52,6 +52,10 @@ async function getUserBooking(userId: number) {
 
 async function updateBooking(userId: number, roomId: number, bookingId: number) {
 
+  
+  const userBooking = await bookingRepository.findUserBooking(userId);
+  if (!userBooking) throw {type: "noBooking", message: "You don't have any booking yet"}
+
   if (!roomId) throw {type: "BodyError", message: "Your body must contain roomId"};
 
   const room = await bookingRepository.findRoomById(roomId);
@@ -59,7 +63,10 @@ async function updateBooking(userId: number, roomId: number, bookingId: number) 
 
     if (room.capacity === 0)  throw {type: "noCapacity", message: "The room you select is out of capacity"}
 
+    if (userBooking.id !== bookingId) throw {type: "bookingFromAnotherUser", message: "This booking is from another user"}
+
     const booking = await  bookingRepository.updateBooking(roomId, bookingId);
+  
 
     return booking;
 
