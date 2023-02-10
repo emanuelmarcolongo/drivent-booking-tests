@@ -50,9 +50,25 @@ async function getUserBooking(userId: number) {
   return userBooking;
 }
 
+async function updateBooking(userId: number, roomId: number, bookingId: number) {
+
+  if (!roomId) throw {type: "BodyError", message: "Your body must contain roomId"};
+
+  const room = await bookingRepository.findRoomById(roomId);
+    if (!room) throw {type: "RoomNotFound", message: "Room with given ID wasn't found"}
+
+    if (room.capacity === 0)  throw {type: "noCapacity", message: "The room you select is out of capacity"}
+
+    const booking = await  bookingRepository.updateBooking(roomId, bookingId);
+
+    return booking;
+
+}
+
 const bookingService = {
     postBooking,
-    getUserBooking
+    getUserBooking,
+    updateBooking
 }
 
 export default bookingService;

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { AuthenticatedRequest } from "@/middlewares";
 import bookingService from "@/services/booking-service";
+import { number } from "joi";
 
 export async function postBooking(req: AuthenticatedRequest, res: Response) {
   
@@ -45,13 +46,22 @@ export async function getBooking(req: AuthenticatedRequest, res: Response) {
 }
 
 export async function putBooking(req: AuthenticatedRequest, res: Response) {
-  
+    const {roomId} = req.body;
     const {userId} = req;
+    const {bookingId} = req.params;
 
   try {
     
+    const booking = await bookingService.updateBooking(Number(userId), Number(roomId), Number(bookingId));
+
+    return res.status(200).send({bookingId: booking.id})
 
   } catch (error) {
+    if (error.type === "BodyError") return res.status(400).send(error.message);
+    if (error.type === "RoomNotFound") return res.status(404).send(error.message);
+    if (error.type === "noCapacity") return res.status(403).send(error.message);
+
+    
     return res.status(httpStatus.UNAUTHORIZED).send({});
   }
 }
