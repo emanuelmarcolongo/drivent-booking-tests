@@ -42,8 +42,17 @@ async function postBooking(userId: number, roomId: number) {
     return booking;
 }
 
+async function getUserBooking(userId: number) {
+
+  const userBooking = await bookingRepository.findUserBooking(userId);
+  if (!userBooking) throw {type: "noBooking", message: "You don't have any booking yet"}
+
+  return userBooking;
+}
+
 const bookingService = {
-    postBooking
+    postBooking,
+    getUserBooking
 }
 
 export default bookingService;

@@ -34,8 +34,12 @@ export async function getBooking(req: AuthenticatedRequest, res: Response) {
 
   try {
     
+    const userBooking = await bookingService.getUserBooking(userId);
+
+    return res.status(200).send(userBooking);
 
   } catch (error) {
+    if (error.type === "noBooking") return res.status(404).send(error.message);
     return res.status(httpStatus.UNAUTHORIZED).send({});
   }
 }
