@@ -36,9 +36,7 @@ async function postBooking(userId: number, roomId: number) {
     }
 
     const booking = await bookingRepository.postBooking(userId, roomId);
-    if (!booking) throw {type: "undefinedError", message: "something went wrong, please try again"}
-
-    
+   
     return booking;
 }
 
@@ -67,7 +65,6 @@ async function updateBooking(userId: number, roomId: number, bookingId: number) 
 
     const booking = await  bookingRepository.updateBooking(roomId, bookingId);
   
-
     return booking;
 
 }

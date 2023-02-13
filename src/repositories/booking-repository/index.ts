@@ -9,7 +9,6 @@ async function postBooking(userId: number, roomId: number) {
             updatedAt: new Date().toISOString()
         }
     })
-
 }
 
 async function findRoomById(roomId: number) {
@@ -49,9 +48,7 @@ async function updateBooking(roomId: number, bookingId: number ) {
             roomId: roomId
         }
     })
-   
     return booking
-
 }
 
 const bookingRepository = {
